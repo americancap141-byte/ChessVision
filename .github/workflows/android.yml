@@ -33,18 +33,6 @@ jobs:
             yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null 2>&1 || true
           fi
 
-      - name: Download official Stockfish ARM64 binary
-        run: |
-          mkdir -p app/src/main/jniLibs/arm64-v8a /tmp/sf_arm64
-          if curl -fL --retry 3 -o /tmp/sf_arm64.tar.gz "https://github.com/official-stockfish/Stockfish/releases/latest/download/stockfish-android-arm64-universal.tar.gz"; then
-            tar -xzf /tmp/sf_arm64.tar.gz -C /tmp/sf_arm64
-            SF_BIN=$(find /tmp/sf_arm64 -type f -name "stockfish*" ! -name "*.nnue" | head -n 1)
-            if [ -n "$SF_BIN" ]; then
-              cp "$SF_BIN" app/src/main/jniLibs/arm64-v8a/libstockfish.so
-              chmod 755 app/src/main/jniLibs/arm64-v8a/libstockfish.so
-            fi
-          fi
-
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
